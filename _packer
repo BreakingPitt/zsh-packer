@@ -1,0 +1,116 @@
+#compdef packer
+
+local -a _packer_cmds opt_args
+_packer_cmds=(
+  'build:Builds or changes infrastructure.'
+  'console:Interactive console for Packer interpolations.'
+  'fix:Fixes templates from old versions of Packer.'
+  'fmt:Rewrites HCL2 files to canonical format.'
+  'hcl2_upgrade:Transforms a JSON template into an HCL2 configuration.'
+  'init:Initialize a Packer working directory.'
+  'inspect:Prints the components of a template.'
+  'validate:Validates the Packer files.'
+  'version:Prints the Packer version.'
+)
+
+__build() {
+    _arguments \
+      '-color=[(false) Disable color output. (Default: color)]' \
+      '-debug[Debug mode enabled for builds.]' \
+      '-except=[(foo,bar,baz) Run all builds and post-processors other than these.]' \
+      '-only=[(foo,bar,baz) Build only the specified builds.]' \
+      '-force[Force a build to continue if artifacts exist, deletes existing artifacts.]' \
+      '-machine-readable[Produce machine-readable output.]' \
+      '-on-error=[(cleanup,abort,ask,run-cleanup-provisioner) If the build fails do: clean up (default), abort, ask, or run-cleanup-provisioner.]' \
+      '-parallel-builds=[(0) Number of builds to run in parallel. 1 disables parallelization. 0 means no limit (Default: 0)]' \
+      '-timestamp-ui[Enable prefixing of each ui output with an RFC3339 timestamp.]' \
+      '*-var[("key=value") Variable for templates, can be used multiple times.]' \
+      '*-var-file=[(path) Set variables in the Packer configuration from JSON or HCL2 file containing user variables.]:file:_files -g "*.pkr.hcl{,.json}'
+}
+
+
+__console() {
+    _arguments \
+      '*-var[("key=value") Set a variable in the Packer configuration. This flag can be set multiple times.]' \
+      '*-var-file=[(path) Set variables in the Packer configuration from JSON or HCL2 file containing user variables.]:file:_files -g "*.pkr.hcl{,.json}"'
+}
+
+
+__fix() {
+    _arguments \
+      '-validate=[(true) Validates the fixed template.]:lock:(true true)' 
+}
+
+
+__fmt(){
+    _arguments \
+      '-check[Check if the input is formatted. Exit status will be 0 if all input is properly formatted and non-zero otherwise.]' \
+      '-diff[Display diffs of formatting change]' \
+      "-write[Don't write to source files(always disabled if using -check)]" \
+      '-recursive[Also process files in subdirectories. By default, only the given directory (or current directory) is processed.]'
+} 
+
+
+__hcl2_upgrade(){
+    _arguments \
+      '-output-file=[(path) Set output file name.]:file:_files -g "*.pkr.hcl{,.json}"' \
+      '-with-annotations[Add helper annotation comments to the file to help new HCL2 users understand the template format.]'
+}
+
+
+__init(){
+    _arguments \
+      '-upgrade[Installs missing plugins, update installed plugins to the latest available version, if there is a new higher one.]'
+} 
+
+
+__inspect() {
+    _arguments \
+      '-machine-readable[Produce machine-readable output.]' \
+}
+
+
+__validate() {
+    _arguments \
+      '-syntax-only[Only check syntax. Do not verify config of the template.]' \
+      '-except=[(foo,bar,baz) Run all builds and post-processors other than these.]' \
+      '-only=[(foo,bar,baz) Build only the specified builds.]' \
+      '-machine-readable[Produce machine-readable output.]' \
+      '*-var[("key=value") Set a variable in the Packer configuration. This flag can be set multiple times.]' \
+      '*-var-file=[(path) Set variables in the Packer configuration from JSON or HCL2 file containing user variables.]:file:_files -g "*.pkr.hcl{,.json}"'
+}
+
+
+__version() {
+    _arguments \
+}
+
+
+_arguments '*:: :->command'
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "packer command" _packer_cmds
+  return
+fi
+
+local -a _command_args
+case "$words[1]" in
+  build)
+    __build ;;
+  console)
+    __console ;;
+  fix)
+    __fix ;;
+  fmt)
+    __fmt ;;
+  hcl2_upgrade)
+    __hcl2_upgrade ;;
+  init)
+    __init ;;  
+  inspect)
+    __inspect ;;
+  validate)
+    __validate ;;  
+  version)
+    __version ;;
+esac
