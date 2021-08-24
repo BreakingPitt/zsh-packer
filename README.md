@@ -11,7 +11,8 @@ An [`oh-my-zsh`](https://ohmyz.sh/) plugin that adds some useful aliases/autocom
 
 Firstly, clone this repository in `oh-my-zsh`'s plugins directory.
 
-``zsh
+```
+zsh
 git clone https://github.com/breakingpitt/zsh-packer.git ~/.oh-my-zsh/plugins/zsh-packer
 ```
 
